@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Simulation Lab</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+
+    <div class="app-wrapper">
+        
+        <header class="top-bar">
+            <div class="logo-section">
+                <div class="logo-icon">⚛</div>
+                <div class="logo-text">Quantum<span class="highlight">Sim</span></div>
+            </div>
+            <div class="status-badge">
+                <span class="status-dot"></span> System Ready
+            </div>
+        </header>
+
+        <main class="grid-container">
+            
+            <div class="col-left">
+                
+                <div class="panel circuit-panel">
+                    <div class="panel-header">
+                        <h3>Quantum Circuit</h3>
+                        <div class="toggle-wrapper">
+                            <input type="checkbox" id="animToggle" checked>
+                            <label for="animToggle">Visual FX</label>
+                        </div>
+                    </div>
+                    
+                    <div class="circuit-container">
+                        <div class="qubit-row">
+                            <span class="qubit-label">q[0]</span>
+                            <div class="wire-wrapper">
+                                <div class="wire"></div>
+                                <div class="signal" id="p0"></div>
+                                
+                                <div class="gate h-gate" id="gH">H</div>
+                                
+                                <div class="gate ctrl" id="gC"></div>
+                                
+                                <div class="connector" id="gLink"></div>
+                            </div>
+                            <div class="readout-box" id="resBox0">1</div>
+                        </div>
+
+                        <div class="qubit-row">
+                            <span class="qubit-label">q[1]</span>
+                            <div class="wire-wrapper">
+                                <div class="wire"></div>
+                                <div class="signal" id="p1"></div>
+                                
+                                <div class="gate tgt" id="gT">⊕</div>
+                            </div>
+                            <div class="readout-box" id="resBox1">1</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel viz-panel">
+                    <div class="panel-header"><h3>Bloch Sphere Representation</h3></div>
+                    <div class="spheres-wrapper">
+                        <div class="sphere-unit">
+                            <div class="unit-label">Qubit 0</div>
+                            <div class="canvas-3d-container">
+                                <div id="canvas0" class="webgl-canvas"></div>
+                                <div class="axis-label lbl-y">Y |0⟩</div>
+                                <div class="axis-label lbl-x">X |+⟩</div>
+                                <div class="axis-label lbl-z">Z</div>
+                            </div>
+                        </div>
+                        <div class="sphere-unit">
+                            <div class="unit-label">Qubit 1</div>
+                            <div class="canvas-3d-container">
+                                <div id="canvas1" class="webgl-canvas"></div>
+                                <div class="axis-label lbl-y">Y |0⟩</div>
+                                <div class="axis-label lbl-x">X |+⟩</div>
+                                <div class="axis-label lbl-z">Z</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-right">
+                <div class="panel control-panel">
+                    <div class="panel-header"><h3>Operations</h3></div>
+                    <div class="control-grid">
+                        <button class="btn btn-primary" onclick="runExperiment(1)">▶ Simulate Measure</button>
+                        <div class="btn-group">
+                            <button class="btn btn-secondary" onclick="runExperiment(100)">100 Shots</button>
+                            <button class="btn btn-secondary" onclick="runExperiment(1000)">1000 Shots</button>
+                        </div>
+                        <button class="btn btn-outline" onclick="resetLab()">↺ Reset System</button>
+                    </div>
+                    <div class="console-log" id="liveStatus">> Ready.</div>
+                </div>
+
+                <div class="panel data-panel">
+                    <div class="panel-header"><h3>Measurement Probability</h3></div>
+                    <div class="histogram-container">
+                        <div class="hist-row">
+                            <span class="hist-lbl">|00⟩</span>
+                            <div class="hist-track"><div class="hist-fill" id="b00"></div></div>
+                            <span class="hist-val" id="v00">0%</span>
+                        </div>
+                        <div class="hist-row">
+                            <span class="hist-lbl">|01⟩</span>
+                            <div class="hist-track"><div class="hist-fill" id="b01"></div></div>
+                            <span class="hist-val" id="v01">0%</span>
+                        </div>
+                        <div class="hist-row">
+                            <span class="hist-lbl">|10⟩</span>
+                            <div class="hist-track"><div class="hist-fill" id="b10"></div></div>
+                            <span class="hist-val" id="v10">0%</span>
+                        </div>
+                        <div class="hist-row">
+                            <span class="hist-lbl">|11⟩</span>
+                            <div class="hist-track"><div class="hist-fill" id="b11"></div></div>
+                            <span class="hist-val" id="v11">0%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

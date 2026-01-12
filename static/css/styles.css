@@ -1,0 +1,216 @@
+:root {
+    /* Color Palette matching the image */
+    --bg-app: #0f1218;       
+    --bg-panel: #161b22;     
+    --border: #272e3b;       
+    
+    --gate-blue: #3b82f6;    /* The bright blue for gates */
+    --wire-color: #4b5563;   
+    
+    --text-main: #f0f6fc;
+    --text-dim: #8b949e;
+    
+    --success: #238636;      /* Green for Readout Box */
+    --success-bg: rgba(35, 134, 54, 0.1);
+    
+    --ax-x: #ef4444; 
+    --ax-y: #22c55e; 
+    --ax-z: #3b82f6; 
+    
+    --font-ui: 'Inter', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    background-color: var(--bg-app);
+    color: var(--text-main);
+    font-family: var(--font-ui);
+    height: 100vh; overflow: hidden;
+}
+
+.app-wrapper {
+    max-width: 1400px; margin: 0 auto; height: 100%;
+    padding: 20px; display: flex; flex-direction: column; gap: 20px;
+}
+
+/* HEADER */
+.top-bar {
+    height: 60px; background: var(--bg-panel);
+    border: 1px solid var(--border); border-radius: 8px;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0 25px;
+}
+.logo-section { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.2rem; }
+.logo-icon { color: var(--gate-blue); font-size: 1.5rem; }
+.status-badge {
+    background: var(--success-bg); color: #3fb950;
+    padding: 6px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 600;
+    display: flex; align-items: center; gap: 8px;
+}
+.status-dot { width: 8px; height: 8px; background: #3fb950; border-radius: 50%; }
+
+/* GRID */
+.grid-container {
+    flex: 1; display: grid; grid-template-columns: 1.5fr 1fr; gap: 20px; overflow: hidden;
+}
+.col-left, .col-right { display: flex; flex-direction: column; gap: 20px; height: 100%; }
+
+/* PANELS */
+.panel {
+    background: var(--bg-panel); border: 1px solid var(--border);
+    border-radius: 12px; display: flex; flex-direction: column;
+    overflow: hidden; /* Important for alignment */
+}
+.panel-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 15px 20px; border-bottom: 1px solid var(--border);
+    background: #1c2128; /* Slightly lighter header */
+}
+.panel-header h3 { margin: 0; font-size: 1rem; color: var(--text-main); font-weight: 600; }
+
+/* --- QUANTUM CIRCUIT (Specific Styling) --- */
+.circuit-panel {
+    padding: 0; /* Let header and container handle spacing */
+    min-height: 220px;
+}
+.circuit-container {
+    flex: 1; display: flex; flex-direction: column; justify-content: center;
+    padding: 20px 30px; gap: 40px; /* Space between qubit lines */
+}
+
+/* Qubit Rows */
+.qubit-row {
+    display: flex; align-items: center; height: 40px; 
+}
+.qubit-label {
+    width: 50px; font-family: var(--font-mono); color: var(--text-dim); font-size: 1.1rem;
+}
+
+/* Wire Wrapper */
+.wire-wrapper {
+    flex: 1; position: relative; height: 100%; 
+    display: flex; align-items: center; margin-right: 30px;
+}
+.wire {
+    width: 100%; height: 2px; background: var(--wire-color);
+}
+
+/* GATES & COMPONENTS */
+.gate {
+    position: absolute; width: 40px; height: 40px; 
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; z-index: 10; font-family: var(--font-mono);
+    transform: translateX(-50%);
+}
+
+/* H-Gate: Blue Rounded Square */
+.h-gate {
+    left: 18%; 
+    background: var(--gate-blue); 
+    color: white; 
+    border-radius: 6px; 
+    font-size: 1.2rem;
+    box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+}
+
+/* Control Dot: Blue Circle */
+.ctrl {
+    left: 50%; width: 16px; height: 16px; top: 12px; /* Center vert on wire */
+    background: var(--gate-blue); 
+    border-radius: 50%;
+}
+
+/* Target Gate: Blue Circle with Plus */
+.tgt {
+    left: 50%; top: 0px; /* Center vert on wire */
+    width: 40px; height: 40px;
+    background: transparent; 
+    border: 2px solid var(--gate-blue); 
+    border-radius: 50%; 
+    color: var(--gate-blue); 
+    font-size: 1.5rem; background: var(--bg-panel); /* Mask wire behind it */
+}
+
+/* The Vertical Connector Line */
+/* This connects the top dot to the bottom circle */
+.connector {
+    position: absolute; 
+    left: 50%; 
+    top: 20px; /* Start at center of top row */
+    width: 2px; 
+    height: 80px; /* Must span gap between rows. 40px row + 40px gap = 80px */
+    background: var(--gate-blue); 
+    z-index: 5; 
+    transform: translateX(-50%);
+}
+
+.signal {
+    position: absolute; width: 12px; height: 12px; 
+    background: #fff; border-radius: 50%; 
+    z-index: 20; opacity: 0; transform: translateX(-50%);
+    box-shadow: 0 0 8px white;
+}
+
+/* Measurement Box */
+.readout-box {
+    width: 45px; height: 45px; 
+    background: rgba(35, 134, 54, 0.1); 
+    border: 1px solid #238636;
+    border-radius: 6px; 
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-mono); font-weight: bold; font-size: 1.2rem;
+    color: #3fb950;
+}
+
+/* VISUALIZATION */
+.viz-panel { flex: 1; padding: 20px; }
+.spheres-wrapper { display: flex; justify-content: space-around; align-items: center; height: 100%; }
+.sphere-unit { width: 45%; height: 100%; display: flex; flex-direction: column; text-align: center; }
+.unit-label { margin-bottom: 5px; color: var(--text-dim); font-size: 0.9rem; font-weight: 500; }
+
+.canvas-3d-container {
+    flex: 1; position: relative; min-height: 250px;
+    background: radial-gradient(circle at center, rgba(59, 130, 246, 0.05), transparent 70%);
+    border-radius: 8px; border: 1px solid var(--border);
+}
+.webgl-canvas { width: 100%; height: 100%; }
+
+.axis-label { position: absolute; font-family: var(--font-mono); font-weight: bold; font-size: 0.8rem; text-shadow: 0 0 2px #000; }
+.lbl-y { top: 5px; left: 50%; transform: translateX(-50%); color: var(--ax-y); }
+.lbl-x { top: 50%; right: 5px; transform: translateY(-50%); color: var(--ax-x); }
+.lbl-z { bottom: 5px; left: 10px; color: var(--ax-z); }
+
+/* CONTROLS */
+.control-panel { flex: 0 0 auto; padding: 20px; }
+.control-grid { display: flex; flex-direction: column; gap: 12px; }
+.btn-group { display: flex; gap: 10px; }
+.btn-group .btn { flex: 1; }
+
+.btn {
+    padding: 12px 20px; border-radius: 6px; border: none; cursor: pointer;
+    font-family: var(--font-ui); font-weight: 600; font-size: 0.9rem; transition: 0.2s;
+}
+.btn-primary { background: var(--gate-blue); color: white; }
+.btn-primary:hover { background: #2563eb; }
+.btn-secondary { background: #21262d; color: var(--text-main); border: 1px solid var(--border); }
+.btn-secondary:hover { background: #30363d; }
+.btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-dim); }
+.btn-outline:hover { border-color: var(--text-main); color: var(--text-main); }
+
+.console-log {
+    margin-top: 15px; padding: 10px; background: #0d1117; border-radius: 6px;
+    font-family: var(--font-mono); font-size: 0.85rem; color: #3fb950; border-left: 3px solid #3fb950;
+}
+
+/* HISTOGRAM */
+.data-panel { flex: 1; padding: 20px; }
+.histogram-container { display: flex; flex-direction: column; justify-content: center; height: 100%; gap: 15px; }
+.hist-row { display: flex; align-items: center; gap: 10px; }
+.hist-lbl { width: 40px; font-family: var(--font-mono); color: var(--text-dim); font-size: 0.9rem; }
+.hist-track { flex: 1; height: 10px; background: #21262d; border-radius: 5px; overflow: hidden; }
+.hist-fill { height: 100%; width: 0%; background: var(--gate-blue); transition: width 0.5s; }
+.hist-val { width: 45px; text-align: right; font-family: var(--font-mono); font-weight: bold; font-size: 0.9rem; }
+
+.toggle-wrapper { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--text-dim); }
